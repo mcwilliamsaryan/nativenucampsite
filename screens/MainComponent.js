@@ -91,7 +91,6 @@ const Main = () => {
           component={HomeNavigator}
           options={{ title: 'Home' }}
         />
-
         <Drawer.Screen
           name='Directory'
           component={DirectoryNavigator}
