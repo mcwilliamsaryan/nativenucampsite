@@ -9,30 +9,33 @@ import {
   DrawerItemList,
 } from '@react-navigation/drawer';
 import HomeScreen from './HomeScreen';
-import AboutScreen from './ContactScreen';
-import ContactScreen from './AboutScreen';
+import AboutScreen from './AboutScreen';
+import ContactScreen from './ContactScreen';
 import { Icon } from 'react-native-elements';
 import logo from '../assets/images/logo.png';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { fetchPartners } from '../features/partners/partnersSlice';
+import { fetchCampsites } from '../features/campsites/campsitesSlice';
+import { fetchPromotions } from '../features/promotions/promotionsSlice';
+import { fetchComments } from '../features/comments/commentsSlice';
 
 const Drawer = createDrawerNavigator();
 
 const screenOptions = {
   headerTintColor: '#fff',
-  headerStyle: {
-    backgroundColor: '#5637DD',
-  },
+  headerStyle: { backgroundColor: '#5637DD' },
 };
 
 const HomeNavigator = () => {
   const Stack = createStackNavigator();
-
   return (
     <Stack.Navigator screenOptions={screenOptions}>
       <Stack.Screen
         name='Home'
         component={HomeScreen}
         options={({ navigation }) => ({
-          title: 'Home ',
+          title: 'Home',
           headerLeft: () => (
             <Icon
               name='home'
@@ -47,38 +50,8 @@ const HomeNavigator = () => {
   );
 };
 
-const DirectoryNavigator = () => {
-  const Stack = createStackNavigator();
-
-  return (
-    <Stack.Navigator initialRouteName='Directory' screenOptions={screenOptions}>
-      <Stack.Screen
-        name='Directory'
-        component={DirectoryScreen}
-        options={({ navigation }) => ({
-          title: 'Campsite Directory',
-          headerLeft: () => (
-            <Icon
-              name='list'
-              type='font-awesome'
-              iconStyle={styles.stackIcon}
-              onPress={() => navigation.toggleDrawer()}
-            />
-          ),
-        })}
-      />
-      <Stack.Screen
-        name='CampsiteInfo'
-        component={CampsiteInfoScreen}
-        options={({ route }) => ({ title: route.params.campsite.name })}
-      />
-    </Stack.Navigator>
-  );
-};
-
 const AboutNavigator = () => {
   const Stack = createStackNavigator();
-
   return (
     <Stack.Navigator screenOptions={screenOptions}>
       <Stack.Screen
@@ -101,7 +74,6 @@ const AboutNavigator = () => {
 
 const ContactNavigator = () => {
   const Stack = createStackNavigator();
-
   return (
     <Stack.Navigator screenOptions={screenOptions}>
       <Stack.Screen
@@ -123,6 +95,36 @@ const ContactNavigator = () => {
   );
 };
 
+const DirectoryNavigator = () => {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator initialRouteName='Directory' screenOptions={screenOptions}>
+      <Stack.Screen
+        name='Directory'
+        component={DirectoryScreen}
+        options={({ navigation }) => ({
+          title: 'Campsite Directory',
+          headerLeft: () => (
+            <Icon
+              name='list'
+              type='font-awesome'
+              iconStyle={styles.stackIcon}
+              onPress={() => navigation.toggleDrawer()}
+            />
+          ),
+        })}
+      />
+      <Stack.Screen
+        name='CampsiteInfo'
+        component={CampsiteInfoScreen}
+        options={({ route }) => ({
+          title: route.params.campsite.name,
+        })}
+      />
+    </Stack.Navigator>
+  );
+};
+
 const CustomDrawerContent = (props) => (
   <DrawerContentScrollView {...props}>
     <View style={styles.drawerHeader}>
@@ -138,6 +140,15 @@ const CustomDrawerContent = (props) => (
 );
 
 const Main = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(fetchCampsites());
+    dispatch(fetchPromotions());
+    dispatch(fetchPartners());
+    dispatch(fetchComments());
+  }, [dispatch]);
+
   return (
     <View
       style={{
@@ -148,7 +159,7 @@ const Main = () => {
       <Drawer.Navigator
         initialRouteName='Home'
         drawerContent={CustomDrawerContent}
-        drawerStyle={{ backgroundColor: '#cec6ff' }}
+        drawerStyle={{ backgroundColor: '#CEC8FF' }}
       >
         <Drawer.Screen
           name='Home'
@@ -182,7 +193,6 @@ const Main = () => {
             ),
           }}
         />
-
         <Drawer.Screen
           name='About'
           component={AboutNavigator}
@@ -199,7 +209,6 @@ const Main = () => {
             ),
           }}
         />
-
         <Drawer.Screen
           name='Contact'
           component={ContactNavigator}
