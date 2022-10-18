@@ -43,7 +43,7 @@ const LoginTab = ({ navigation }) => {
   }, []);
 
   return (
-    <View style={StyleSheet.container}>
+    <View style={styles.container}>
       <Input
         placeholder='Username'
         leftIcon={{ type: 'font-awesome', name: 'user-o' }}
